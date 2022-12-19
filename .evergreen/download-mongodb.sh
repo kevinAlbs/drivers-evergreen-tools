@@ -508,10 +508,14 @@ get_mongodb_download_url_for ()
      exit 1
    fi
 
+   echo "download-mongodb.sh getting URL for crypt_shared ... begin"
+
    # Get the download URL for crypt_shared.
    # The crypt_shared package is available on server 6.0 and newer.
    # Try to download a version of crypt_shared matching the server version.
    # If no matching version is available, try to download the latest Major release of crypt_shared.
+
+   echo "_VERSION is '$_VERSION'"
    case "$_VERSION" in
       latest)
          # If latest is not at least 6.0 on this OS, the crypt_shared package will not be available.
@@ -530,6 +534,8 @@ get_mongodb_download_url_for ()
          exit 1;
          ;;
    esac
+
+   echo "MONGO_CRYPT_SHARED_DOWNLOAD_URL is '$MONGO_CRYPT_SHARED_DOWNLOAD_URL'"
 
    if [ -n "$MONGO_CRYPT_SHARED_DOWNLOAD_URL" ]; then
       # The crypt_shared package is simply the same file URL with the "mongodb-"
