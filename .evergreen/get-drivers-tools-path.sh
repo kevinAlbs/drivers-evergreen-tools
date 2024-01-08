@@ -7,6 +7,13 @@
 
 set -o errexit
 
+if [ ! -z "${DRIVERS_TOOLS:-}" ]; then
+    # Do not overwrite a previously set `DRIVERS_TOOLS`.
+    # Some drivers overwrite `DRIVERS_TOOLS` to non-default directories.
+    echo "$DRIVERS_TOOLS"
+    exit 0
+fi
+
 DIR=$(dirname "${BASH_SOURCE[0]}")
 if command -v realpath &> /dev/null; then
     DIR=$(realpath "$DIR")
