@@ -680,7 +680,8 @@ download_and_extract_package ()
    if [ -n "$MONGODB_BINARY_ROOT" ]; then
       cd $MONGODB_BINARY_ROOT
    else
-      DRIVERS_TOOLS=$(./get-drivers-tools-path.sh)
+      local -r this_dir=$(dirname ${BASH_SOURCE:-$0})
+      DRIVERS_TOOLS=$($this_dir/get-drivers-tools-path.sh)
       cd $DRIVERS_TOOLS
    fi
    echo "Installing server binaries..."
@@ -705,7 +706,8 @@ download_and_extract_mongosh ()
    if [ -n "$MONGODB_BINARY_ROOT" ]; then
       cd $MONGODB_BINARY_ROOT
    else
-      DRIVERS_TOOLS=$(./get-drivers-tools-path.sh)
+      local -r this_dir=$(dirname ${BASH_SOURCE:-$0})
+      DRIVERS_TOOLS=$($this_dir/get-drivers-tools-path.sh)
       cd $DRIVERS_TOOLS
    fi
    echo "Installing MongoDB shell..."
@@ -737,7 +739,8 @@ download_and_extract ()
       download_and_extract_mongosh "$MONGOSH_DOWNLOAD_URL" "$EXTRACT_MONGOSH"
    fi
 
-   DRIVERS_TOOLS=$(./get-drivers-tools-path.sh)
+   local -r this_dir=$(dirname ${BASH_SOURCE:-$0})
+   DRIVERS_TOOLS=$($this_dir/get-drivers-tools-path.sh)
 
    if [ ! -z "${INSTALL_LEGACY_SHELL:-}" -a ! -e $DRIVERS_TOOLS/mongodb/bin/mongo -a ! -e $DRIVERS_TOOLS/mongodb/bin/mongo.exe ]; then
       # The legacy mongo shell is not included in server downloads of 6.0.0-rc6 or later. Refer: SERVER-64352.
