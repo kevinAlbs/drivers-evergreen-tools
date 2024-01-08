@@ -1,6 +1,8 @@
 #!/bin/sh
 set -o errexit  # Exit the script with error if any of the commands fail
 
+set -o xtrace
+
 # Supported environment variables:
 #   AUTH                   Set to "auth" to enable authentication. Defaults to "noauth"
 #   SSL                    Set to "yes" to enable SSL. Defaults to "nossl"
@@ -159,5 +161,10 @@ EOT
 
 # Set the requireApiVersion parameter
 if [ ! -z "$REQUIRE_API_VERSION" ]; then
+  echo "KEVINALBS debug ... begin"
+  echo "MONGO_ORCHESTRATION_HOME=$MONGO_ORCHESTRATION_HOME"
+  echo "DRIVERS_TOOLS=$DRIVERS_TOOLS"
+  echo "pwd=$(pwd)"
+  echo "KEVINALBS debug ... end"
   mongosh $URI $MONGO_ORCHESTRATION_HOME/require-api-version.js
 fi
