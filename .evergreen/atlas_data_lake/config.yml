@@ -34,6 +34,7 @@ tenant:
         ipList: [ "0.0.0.0" ]
         hostnames:
           - localhost
+        cloudProvider: local
         security:
           users:
             - name: mhuser # password: "pencil"
