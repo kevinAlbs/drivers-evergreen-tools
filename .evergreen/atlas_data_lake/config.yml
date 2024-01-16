@@ -25,7 +25,7 @@ frontend:
       memory: true
 
 execution:
-  mongohousedPath: /app
+  mongohousedPath: "${DRIVERS_TOOLS}/mongohouse/artifacts/mongohoused"
 
 tenant:
   config:
@@ -54,7 +54,7 @@ tenant:
           stores:
             - name: localstore
               provider: local
-              path: /src
+              path: "${DRIVERS_TOOLS}/.evergreen/atlas_data_lake"
           databases:
             - name: test
               collections:
