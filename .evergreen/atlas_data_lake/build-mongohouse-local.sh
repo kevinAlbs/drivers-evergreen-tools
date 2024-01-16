@@ -31,7 +31,7 @@ go version
 DL_START=$(date +%s)
 cd "$ORIG_DIR"
 rm -rf mongohouse
-git clone git@github.com:10gen/mongohouse.git
+git clone --depth=1 git@github.com:10gen/mongohouse.git
 cd mongohouse
 GO111MODULE=on go mod download
 DL_END=$(date +%s)
