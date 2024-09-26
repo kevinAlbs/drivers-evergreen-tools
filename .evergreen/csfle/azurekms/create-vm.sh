@@ -23,6 +23,7 @@ echo "Creating a Virtual Machine ($AZUREKMS_VMNAME) ... begin"
 # Use --nic-delete-option 'Delete' to delete the NIC.
 # Specify a name for the public IP to delete later.
 # Specify a name for the Network Security Group (NSG) to delete later.
+# Use --nsg-rule=NONE to remove default open SSH and RDP ports.
 # Pipe to /dev/null to hide the output. The output includes tenantId.
 az vm create \
     --resource-group "$AZUREKMS_RESOURCEGROUP" \
