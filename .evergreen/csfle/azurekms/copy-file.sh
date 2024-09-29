@@ -28,3 +28,4 @@ IP=$(az vm show --show-details --resource-group "$AZUREKMS_RESOURCEGROUP" --name
 # Use "-p" to preserve execute mode.
 scp -o StrictHostKeyChecking=no -i "$AZUREKMS_PRIVATEKEYPATH" -p "$AZUREKMS_SRC"  azureuser@"$IP":"$AZUREKMS_DST"
 echo "Copying file $AZUREKMS_SRC to Virtual Machine $AZUREKMS_DST ... end"
+echo "Exiting?"
