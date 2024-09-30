@@ -18,7 +18,7 @@ if [ -z "${AZUREKMS_RESOURCEGROUP:-}" ] || \
     exit 1
 fi
 
-set -xtrace
+set -o xtrace
 
 # Permit SSH access from current IP.
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
