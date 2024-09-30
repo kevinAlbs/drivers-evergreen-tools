@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -o errexit
+# set -o errexit
 set -o pipefail
 set -o nounset
 
@@ -31,3 +31,6 @@ IP=$(az vm show --show-details --resource-group "$AZUREKMS_RESOURCEGROUP" --name
 scp -o StrictHostKeyChecking=no -i "$AZUREKMS_PRIVATEKEYPATH" -p "$AZUREKMS_SRC"  azureuser@"$IP":"$AZUREKMS_DST"
 echo "Copying file $AZUREKMS_SRC to Virtual Machine $AZUREKMS_DST ... end"
 echo "Exiting?"
+echo "PATH=$PATH"
+echo "DRIVERS_TOOLS=$DRIVERS_TOOLS"
+echo "SCRIPT_DIR=$SCRIPT_DIR"
