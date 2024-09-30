@@ -6,9 +6,10 @@
 # set -o pipefail
 # set -o nounset
 
-# # Get DRIVERS_TOOLS path.
-# SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
-# . "$SCRIPT_DIR"/../../handle-paths.sh
+echo "TESTING: Previous passed. Now trying to only add back handle-paths.sh"
+# Get DRIVERS_TOOLS path.
+SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
+. "$SCRIPT_DIR"/../../handle-paths.sh
 
 # VARLIST=(
 #     AZUREKMS_RESOURCEGROUP
