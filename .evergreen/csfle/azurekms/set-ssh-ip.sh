@@ -33,6 +33,6 @@ az network nsg rule update \
 
 IP=$(az vm show --show-details --resource-group "$AZUREKMS_RESOURCEGROUP" --name "$AZUREKMS_VMNAME" --query publicIps -o tsv)
 
-"$DRIVERS_TOOLS/.evergreen/retry-with-backoff.sh" ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no azureuser@"$IP" -i "$AZUREKMS_PRIVATEKEYPATH" "echo 'hi'"
+ATTEMPTS=10 "$DRIVERS_TOOLS/.evergreen/retry-with-backoff.sh" ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no azureuser@"$IP" -i "$AZUREKMS_PRIVATEKEYPATH" "echo 'hi'"
 
 echo "Adding current IP ($EXTERNAL_IP) to Azure Virtual Machine ... end"
