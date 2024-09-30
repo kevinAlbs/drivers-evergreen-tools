@@ -18,6 +18,8 @@ if [ -z "${AZUREKMS_RESOURCEGROUP:-}" ] || \
     exit 1
 fi
 
+set -xtrace
+
 # Permit SSH access from current IP.
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 "$SCRIPT_DIR"/set-ssh-ip.sh
