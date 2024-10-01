@@ -66,17 +66,18 @@ if [ -f secrets-export.sh ]; then
 fi
 # Assign role.
 "$DRIVERS_TOOLS"/.evergreen/csfle/azurekms/assign-role.sh
-# Install dependencies.
-AZUREKMS_SRC="$DRIVERS_TOOLS/.evergreen/csfle/azurekms/remote-scripts/setup-azure-vm.sh" \
-AZUREKMS_DST="./" \
-    "$DRIVERS_TOOLS"/.evergreen/csfle/azurekms/copy-file.sh
-AZUREKMS_CMD="./setup-azure-vm.sh" \
-    "$DRIVERS_TOOLS"/.evergreen/csfle/azurekms/run-command.sh
-# Start mongodb.
-AZUREKMS_SRC="$DRIVERS_TOOLS/.evergreen/csfle/azurekms/remote-scripts/start-mongodb.sh" \
-AZUREKMS_DST="./" \
-    "$DRIVERS_TOOLS"/.evergreen/csfle/azurekms/copy-file.sh
-AZUREKMS_CMD="./start-mongodb.sh" \
-    "$DRIVERS_TOOLS"/.evergreen/csfle/azurekms/run-command.sh
+echo "Skipping installing dependencies and starting mongodb"
+# # Install dependencies.
+# AZUREKMS_SRC="$DRIVERS_TOOLS/.evergreen/csfle/azurekms/remote-scripts/setup-azure-vm.sh" \
+# AZUREKMS_DST="./" \
+#     "$DRIVERS_TOOLS"/.evergreen/csfle/azurekms/copy-file.sh
+# AZUREKMS_CMD="./setup-azure-vm.sh" \
+#     "$DRIVERS_TOOLS"/.evergreen/csfle/azurekms/run-command.sh
+# # Start mongodb.
+# AZUREKMS_SRC="$DRIVERS_TOOLS/.evergreen/csfle/azurekms/remote-scripts/start-mongodb.sh" \
+# AZUREKMS_DST="./" \
+#     "$DRIVERS_TOOLS"/.evergreen/csfle/azurekms/copy-file.sh
+# AZUREKMS_CMD="./start-mongodb.sh" \
+#     "$DRIVERS_TOOLS"/.evergreen/csfle/azurekms/run-command.sh
 
 popd
