@@ -6,7 +6,7 @@
 # set -o pipefail
 # set -o nounset
 
-echo "TESTING: Previous failed. Now trying to do ssh without retry-with-backoff.sh"
+echo "TESTING: Previous failed. Now trying to do ssh without retry-with-backoff.sh and without external IP"
 # Get DRIVERS_TOOLS path.
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 . "$SCRIPT_DIR"/../../handle-paths.sh
@@ -23,7 +23,8 @@ for VARNAME in "${VARLIST[@]}"; do
   [[ -z "${!VARNAME:-}" ]] && echo "ERROR: $VARNAME not set" && exit 1;
 done
 
-EXTERNAL_IP=$(curl -s http://whatismyip.akamai.com/)
+# EXTERNAL_IP=$(curl -s http://whatismyip.akamai.com/)
+EXTERNAL_IP="placeholder"
 
 echo "Adding current IP ($EXTERNAL_IP) to Azure Virtual Machine ... begin"
 # az network nsg rule update \
@@ -36,6 +37,8 @@ IP=$(az vm show --show-details --resource-group "$AZUREKMS_RESOURCEGROUP" --name
 
 # ATTEMPTS=10 "$DRIVERS_TOOLS/.evergreen/retry-with-backoff.sh" ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no azureuser@"$IP" -i "$AZUREKMS_PRIVATEKEYPATH" "echo 'hi'"
 ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no azureuser@"$IP" -i "$AZUREKMS_PRIVATEKEYPATH" "echo 'hi'"
+
+echo "ssh exited with $?"
 
 echo "Adding current IP ($EXTERNAL_IP) to Azure Virtual Machine ... end"
 
