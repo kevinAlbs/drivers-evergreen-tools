@@ -6,26 +6,26 @@
 # set -o pipefail
 # set -o nounset
 
-echo "TESTING: Previous passed. Now trying to only add back handle-paths.sh"
+echo "TESTING: Previous passed. Now trying to add back retry-with-backoff.sh"
 # Get DRIVERS_TOOLS path.
 SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 . "$SCRIPT_DIR"/../../handle-paths.sh
 
-# VARLIST=(
-#     AZUREKMS_RESOURCEGROUP
-#     AZUREKMS_VMNAME
-#     AZUREKMS_PRIVATEKEYPATH
-# )
+VARLIST=(
+    AZUREKMS_RESOURCEGROUP
+    AZUREKMS_VMNAME
+    AZUREKMS_PRIVATEKEYPATH
+)
 
-# # Ensure that all variables required to run the test are set, otherwise throw
-# # an error.
-# for VARNAME in "${VARLIST[@]}"; do
-#   [[ -z "${!VARNAME:-}" ]] && echo "ERROR: $VARNAME not set" && exit 1;
-# done
+# Ensure that all variables required to run the test are set, otherwise throw
+# an error.
+for VARNAME in "${VARLIST[@]}"; do
+  [[ -z "${!VARNAME:-}" ]] && echo "ERROR: $VARNAME not set" && exit 1;
+done
 
-# EXTERNAL_IP=$(curl -s http://whatismyip.akamai.com/)
+EXTERNAL_IP=$(curl -s http://whatismyip.akamai.com/)
 
-# echo "Adding current IP ($EXTERNAL_IP) to Azure Virtual Machine ... begin"
+echo "Adding current IP ($EXTERNAL_IP) to Azure Virtual Machine ... begin"
 # az network nsg rule update \
 #     --name "$AZUREKMS_VMNAME-nsg-rule" \
 #     --nsg-name "$AZUREKMS_VMNAME-nsg" \
@@ -36,6 +36,8 @@ SCRIPT_DIR=$(dirname "${BASH_SOURCE[0]}")
 
 # ATTEMPTS=10 "$DRIVERS_TOOLS/.evergreen/retry-with-backoff.sh" ssh -o ConnectTimeout=5 -o StrictHostKeyChecking=no azureuser@"$IP" -i "$AZUREKMS_PRIVATEKEYPATH" "echo 'hi'"
 
-# echo "Adding current IP ($EXTERNAL_IP) to Azure Virtual Machine ... end"
+ATTEMPTS=10 "$DRIVERS_TOOLS/.evergreen/retry-with-backoff.sh" echo 'hi'
+
+echo "Adding current IP ($EXTERNAL_IP) to Azure Virtual Machine ... end"
 
 echo "Doing nothing within set-ssh-ip.sh to see if task still works"
