@@ -63,16 +63,14 @@ async def on_control_connected(reader: asyncio.StreamReader, writer: asyncio.Str
     on_ipv6_connected = lambda reader, writer: on_test_connected('IPv6', writer, b'\x06', connected, slow)
     # port 0: pick random unused port
     srv4 = await asyncio.start_server(on_ipv4_connected, 'localhost', 0, family=socket.AF_INET, start_serving=False)
-    srv6 = await asyncio.start_server(on_ipv6_connected, 'localhost', 0, family=socket.AF_INET6, start_serving=False)
-    ipv4_port = srv4.sockets[0].getsockname()[1]
-    ipv6_port = srv6.sockets[0].getsockname()[1]
-    print(f'{PREFIX}: [slow {slow}] bound for IPv4 on {ipv4_port}', file=sys.stderr)
-    print(f'{PREFIX}: [slow {slow}] bound for IPv6 on {ipv6_port}', file=sys.stderr)
+    srv_port = srv4.sockets[0].getsockname()[1]
+    # Listen with IPv6 on same port as IPv4
+    srv6 = await asyncio.start_server(on_ipv6_connected, 'localhost', srv_port, family=socket.AF_INET6, start_serving=False)
+    print(f'{PREFIX}: [slow {slow}] bound for IPv4 and IPv6 {srv_port}', file=sys.stderr)
 
     # Reply to control request with success byte and test server ports
     writer.write(b'\x01')
-    writer.write(ipv4_port.to_bytes(2, 'big'))
-    writer.write(ipv6_port.to_bytes(2, 'big'))
+    writer.write(srv_port.to_bytes(2, 'big'))
     await writer.drain()
     writer.close()
     await writer.wait_closed()
