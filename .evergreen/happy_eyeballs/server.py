@@ -4,6 +4,7 @@ import argparse
 import asyncio
 import socket
 import sys
+import mini_opmsg
 
 parser = argparse.ArgumentParser(
     prog='server',
@@ -53,8 +54,8 @@ async def on_control_connected(reader: asyncio.StreamReader, writer: asyncio.Str
 
     # Bind the test ports but do not yet start accepting connections
     connected = asyncio.Event()
-    on_ipv4_connected = lambda reader, writer: on_test_connected('IPv4', writer, b'\x04', connected, slow)
-    on_ipv6_connected = lambda reader, writer: on_test_connected('IPv6', writer, b'\x06', connected, slow)
+    on_ipv4_connected = lambda reader, writer: on_test_connected('IPv4', reader, writer, "ipv4", connected, slow)
+    on_ipv6_connected = lambda reader, writer: on_test_connected('IPv6', reader, writer, "ipv6", connected, slow)
     # port 0: pick random unused port
     srv4 = await asyncio.start_server(on_ipv4_connected, 'localhost', 0, family=socket.AF_INET, start_serving=False)
     srv_port = srv4.sockets[0].getsockname()[1]
@@ -104,10 +105,34 @@ async def test_listen(name: str, srv, delay: bool, connected: asyncio.Event, slo
         # Terminate this test server when either test server has handled a request
         await connected.wait()
 
-async def on_test_connected(name: str, writer: asyncio.StreamWriter, payload: bytes, connected: asyncio.Event, slow: str):
+async def on_test_connected(name: str, reader: asyncio.StreamReader, writer: asyncio.StreamWriter, ip: str, connected: asyncio.Event, slow: str):
     print(f'{PREFIX}: [slow {slow}] connected on {name}', file=sys.stderr)
-    writer.write(payload)
-    await writer.drain()
+
+    while True:
+        print(f'{PREFIX}: [slow {slow}] {name} waiting for OP_MSG', file=sys.stderr)
+        got : mini_opmsg.opmsg | None = await mini_opmsg.recv(reader)
+        if not got:
+            # Peer closed.
+            print(f'{PREFIX}: [slow {slow}] {name} peer closed', file=sys.stderr)
+            break
+
+        cmd = next(iter(got.payload0_document))
+        if cmd in ("hello", "ismaster"):
+            await mini_opmsg.send (writer, got.requestId, {
+                "ismaster": True,
+                "minWireVersion": 0,
+                "maxWireVersion": 25, # Server 8.0.
+                "ok": 1
+            })
+
+        if cmd == "ping":
+            await  mini_opmsg.send (writer, got.requestId, { "ok": 1, "ip": ip })
+        
+        if cmd == "shutdown":
+            await  mini_opmsg.send (writer, got.requestId, { "ok": 1 })
+            print(f'{PREFIX}: [slow {slow}] {name} got shutdown', file=sys.stderr)
+            break
+
     writer.close()
     await writer.wait_closed()
     connected.set()
