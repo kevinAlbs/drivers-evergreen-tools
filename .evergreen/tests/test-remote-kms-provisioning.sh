@@ -206,10 +206,10 @@ test_start_mongodb_uses_archive azurekms .evergreen/csfle/azurekms/remote-script
 
 # Keep these in sync with the defaults in create-and-setup-instance.sh
 # (GCPKMS_IMAGEFAMILY) and create-and-setup-vm.sh (AZUREKMS_IMAGE).
-test_provisioning gcpkms .evergreen/csfle/gcpkms/remote-scripts/setup-gce-instance.sh debian:11
+test_provisioning gcpkms .evergreen/csfle/gcpkms/remote-scripts/setup-gce-instance.sh debian:12
 test_provisioning azurekms .evergreen/csfle/azurekms/remote-scripts/setup-azure-vm.sh debian:11
 
-# debian:11 matches both defaults above. ubuntu:20.04 is a supported
+# debian:11 matches the azurekms default above. ubuntu:20.04 is a supported
 # AZUREKMS_IMAGE (see azurekms/README.md) and additionally covers a system
 # interpreter whose bundled pip predates PEP 600.
 test_no_system_pip nopip-debian11 debian:11
